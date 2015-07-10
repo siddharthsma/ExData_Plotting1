@@ -20,11 +20,12 @@ end_date <- as.Date("2007-02-02")
 data <- subset(all_data, Date >= start_date & Date <= end_date)
 
 # Plot
+data_dt <- within(data, { timestamp=format(as.POSIXct(paste(Date, Time)), "%d/%m/%Y %H:%M:%S") })
+data_dt$timestamp <- strptime(data_dt$timestamp, format="%d/%m/%Y %H:%M:%S")
 
-data$Global_active_power <- as.numeric(as.character(data$Global_active_power))
+data_dt$Global_active_power <- as.numeric(as.character(data_dt$Global_active_power))
 
-png(filename="plot1.png", width= 480, height= 480, units= "px")
-hist((data$Global_active_power), col='red', xlab='Global Active Power (kilowatts)', main="Global Active Power")
+png(filename="plot2.png", width= 480, height= 480, units= "px")
+plot(data_dt$timestamp, data_dt$Global_active_power, type='l', ylab='Global Active Power (kilowatts)', xlab="")
 
 dev.off()
-
